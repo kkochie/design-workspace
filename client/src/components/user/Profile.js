@@ -1,19 +1,34 @@
 import React from "react"
 import { useState, useEffect } from "react"
 import styled from "styled-components"
+import { Error } from "../ui"
 
 export default function Profile()  {
-  const [profile, setProfile] = useState("")
-  const [status, setStatus] = useState("pending")
-  
+  const [{ data: profile, error, status }, setProfile] = useState({ 
+    data: null,
+    error: null,
+    status: "pending",
+  })
+  // const [profile, setProfile] = useState([])
+  // const [status, setStatus] = useState(false)
+
   useEffect(() => {
     fetch("/users")
-      .then((r) => r.json())
-      .then(setProfile)
-      .then(setStatus("resolved"))
+      .then((r) => {
+        if (r.ok) {
+          r.json().then((profile) => 
+            setProfile({ data: profile, error: null, status: "resolved" })
+          )
+        } else {
+          r.json().then((err) =>
+            setProfile({ data: null, error: err.error, status: "rejected" })
+          )
+        }
+    })
   }, [])
 
   if (status === "pending") return <h1>Loading...</h1>
+  if (status === "rejected") return <h1>Error: {error.error}</h1>
 
   return (
     <Container>

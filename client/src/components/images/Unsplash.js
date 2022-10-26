@@ -14,19 +14,19 @@ export default function Unsplash() {
   const fetchRequest = async () => {
     const data = await fetch(
       `https://api.unsplash.com/search/photos?page=1&query=${img}&client_id=${process.env.REACT_APP_UNSPLASH_API_KEY}&per_page=20`
-    );
+    )
     const res = await data.json();
-    const result = res.results;
-    setRes(result);
-  };
+    const result = res.results
+    setRes(result)
+  }
  
   useEffect(() => {
-    fetchRequest();
-  }, []);
+    fetchRequest()
+  }, [])
 
   const Submit = () => {
-    fetchRequest();
-    setImg("");
+    fetchRequest()
+    setImg("")
   };
 
   function addPhoto(asset) {
